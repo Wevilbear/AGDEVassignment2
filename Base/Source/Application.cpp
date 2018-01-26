@@ -4,7 +4,8 @@
 #include "SceneManager.h"
 #include "GraphicsManager.h"
 #include "Lua\LuaInterface.h"
-
+#include "IntroState.h"
+#include "MenuState.h"
 //Include GLEW
 #include <GL/glew.h>
 

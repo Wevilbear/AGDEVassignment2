@@ -51,7 +51,7 @@ void CEnemy3D::Init(void)
 		target = nextWaypoint->GetPosition();
 	else
 		target = Vector3(0, 0, 0);
-	cout << "Next target: " << target << endl;
+	//cout << "Next target: " << target << endl;
 	up.Set(0.0f, 1.0f, 0.0f);
 
 	// Set Boundary
@@ -176,7 +176,7 @@ void CEnemy3D::Update(double dt)
 			target = nextWaypoint->GetPosition();
 		else
 			target = Vector3(0, 0, 0);
-		cout << "Next target: " << target << endl;
+		//cout << "Next target: " << target << endl;
 	}
 	// This is RealTime Loop control
 	// Update the target once every 5 seconds. 

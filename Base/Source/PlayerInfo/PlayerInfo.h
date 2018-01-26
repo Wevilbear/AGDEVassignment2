@@ -164,6 +164,12 @@ public:
 	CGrenadeThrow * secondaryWeapon;
 	// Scrollable weapon switching
 	CWeaponInfo** weaponManager;
+
+	char keyMoveForward;
+	char keyMoveBackward;
+	char keyMoveLeft;
+	char keyMoveRight;
+
 	int m_iCurrentWeapon;
 	const int m_iNumOfWeapon = 2;
 	int hp = 3;

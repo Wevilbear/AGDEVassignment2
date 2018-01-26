@@ -9,6 +9,7 @@
 #include "../WeaponInfo/Pistol.h"
 #include "../Minimap/Minimap.h"
 #include <Windows.h>
+#include "LuaInterface.h"
 
 
 // Allocating and initializing CPlayerInfo's static data member.  
@@ -37,6 +38,10 @@ CPlayerInfo::CPlayerInfo(void)
 	, m_fCameraSwayAngle_LeftLimit(-0.3f)
 	, m_fCameraSwayAngle_RightLimit(0.3f)
 	, m_bCameraSwayDirection(false)
+	, keyMoveForward('W')
+	, keyMoveBackward('S')
+	, keyMoveLeft('A')
+	, keyMoveRight('D')
 {
 }
 
@@ -89,6 +94,17 @@ void CPlayerInfo::Init(void)
 	m_fCameraSwayAngle_LeftLimit = -5.0f;
 	m_fCameraSwayAngle_RightLimit = 5.0f;
 	m_bCameraSwayDirection = false;
+
+	CLuaInterface::GetInstance()->Init();
+	//Initialise the custom keyboard inputs
+	keyMoveForward = CLuaInterface::GetInstance()->getCharValue("moveForward");
+	keyMoveBackward = CLuaInterface::GetInstance()->getCharValue("moveBackward");
+	keyMoveLeft = CLuaInterface::GetInstance()->getCharValue("moveLeft");
+	keyMoveRight = CLuaInterface::GetInstance()->getCharValue("moveRight");
+
+	float distanceSquare = CLuaInterface::GetInstance()->getDistanceSquareValue("CalculateDistanceSquare", Vector3(0, 0, 0), Vector3(10, 10, 10));
+	int a = 1, b = 2, c = 3, d = 4;
+	CLuaInterface::GetInstance()->getVariableValues("GetMinMax", a, b, c, d);
 }
 
 // Returns true if the player is on ground
@@ -305,11 +321,27 @@ void CPlayerInfo::UpdateFreeFall(double dt)
  ********************************************************************************/
 void CPlayerInfo::Update(double dt)
 {
-	//double mouse_diff_x, mouse_diff_y;
-	//MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
+	double mouse_diff_x, mouse_diff_y;
+	MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
 
-	//double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
-	//double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
+	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
+	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
+
+	//Update the position if the WQASD buttons were activated 
+	if (KeyboardController::GetInstance()->IsKeyDown(keyMoveForward) ||
+		KeyboardController::GetInstance()->IsKeyDown(keyMoveBackward) ||
+		KeyboardController::GetInstance()->IsKeyDown(keyMoveLeft) ||
+		KeyboardController::GetInstance()->IsKeyDown(keyMoveRight))
+	{
+		if (KeyboardController::GetInstance()->IsKeyDown(keyMoveForward))
+			Move_FrontBack(dt, true);
+		if (KeyboardController::GetInstance()->IsKeyDown(keyMoveBackward))
+			Move_FrontBack(dt, false);
+		if (KeyboardController::GetInstance()->IsKeyDown(keyMoveLeft))
+			Move_LeftRight(dt, true);
+		if (KeyboardController::GetInstance()->IsKeyDown(keyMoveRight))
+			Move_LeftRight(dt, false);
+	}
 
 	// Check if there is a need to change posture
 	if (KeyboardController::GetInstance()->IsKeyReleased('Z'))
@@ -345,54 +377,32 @@ void CPlayerInfo::Update(double dt)
 	{
 		hp--;
 		if (hp < 0)
-		{
 			hp = 0;
-		}
 	}
 	if (KeyboardController::GetInstance()->IsKeyReleased('O'))
 	{
 		hp++;
 		if (hp > 3)
-		{
 			hp = 3;
-		}
 	}
 	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB) && secondaryWeapon->magRounds != 0)
-	{
-	
 		SwitchSecondary = true;
-	}
 	else
-	{
-		
 		SwitchSecondary = false;
-	}
 	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB) && primaryWeapon->magRounds != 0)
-	{
-
 		SwitchPrimary = true;
-	}
 	else
-	{
 		SwitchPrimary = false;
-	}
 
 	if (primaryWeapon->magRounds != 0)
-	{
 		bool AmmoPrimary = true;
-	}
 	if(primaryWeapon->magRounds == 0)
-	{
 		bool AmmoPrimary = false;
-	}
 	if (secondaryWeapon->magRounds != 0)
-	{
 		bool AmmoSecondary = true;
-	}
- if (secondaryWeapon->magRounds == 0)
-	{
+	if (secondaryWeapon->magRounds == 0)
 		bool AmmoSecondary = false;
-	}
+
 	if (primaryWeapon)
 		primaryWeapon->Update(dt);
 	if (secondaryWeapon)
@@ -428,6 +438,7 @@ void CPlayerInfo::Update(double dt)
 		attachedCamera->SetCameraTarget(target);
 		attachedCamera->SetCameraUp(up);
 	}
+
 }
 
 // Detect and process front / back movement on the controller

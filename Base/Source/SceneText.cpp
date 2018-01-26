@@ -534,40 +534,6 @@ void SceneText::Init()
 		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
 	}
 
-	
-	// Create a CEnemy instance
-	///*anEnemy3D = Create::Enemy3D("TARGET", Vector3(-20.0f, 0.0f, -20.0f));
-	//anEnemy3D->Init();
-	//anEnemy3D->SetPos(Vector3(-30.0f, 0.0f, -100));
-	//anEnemy3D->SetTerrain(groundEntity);
-	//anEnemy3D->SetPAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	//Enemy.push_back(anEnemy3D);
-
-	//CSceneNode*theNode = CSceneGraph::GetInstance()->AddNode(anEnemy3D);
-	//if (theNode == NULL)
-	//{
-	//	cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	//}
-	//anEnemy3D = Create::Enemy3D("TARGET", Vector3(-20.0f, 0.0f, -20.0f));
-	//anEnemy3D->Init();
-	//anEnemy3D->SetPos(Vector3(-00.0f, 0.0f, -100));
-	//anEnemy3D->SetTerrain(groundEntity);
-	//anEnemy3D->SetPAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	//Enemy.push_back(anEnemy3D);
-
-	//CSceneNode* anotherNode = theNode->AddChild(anEnemy3D);
-	//if (anotherNode == NULL)
-	//{
-	//	cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	//}
-
-	//anEnemy3D = Create::Enemy3D("TARGET", Vector3(30.0f, 0.0f, -100.0f));
-	//anEnemy3D->Init();
-	//anEnemy3D->SetPos(Vector3(30.0f, 0.0f, -100));
-	//anEnemy3D->SetTerrain(groundEntity);
-	//anEnemy3D->SetPAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	//Enemy.push_back(anEnemy3D);*/
-
 	GenericEntity* baseCube = Create::Entity("high_head", Vector3(0.0f, -10.0f, 0.0f));
 	CSceneNode* baseNode = CSceneGraph::GetInstance()->AddNode(baseCube);
 	baseCube->InitLOD("high_head", "med_head", "low_head");
@@ -665,7 +631,6 @@ void SceneText::Init()
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f,1.0f,0.0f));
 	}
-	
 
 	// Hardware Abstraction
 	theKeyboard = new CKeyboard();
@@ -703,7 +668,6 @@ void SceneText::Init()
 	theCameraEffects->RifleMeshFired = MeshBuilder::GetInstance()->GenerateQuad("RifleMeshFired", Color(1, 1, 1), 1.f);
 	theCameraEffects->RifleMeshFired->textureID = LoadTGA("Image//rifle_fired.tga");
 
-
 	theCameraEffects->Crosshair = MeshBuilder::GetInstance()->GenerateQuad("Crosshair", Color(1, 1, 1), 1.f);
 	theCameraEffects->Crosshair->textureID = LoadTGA("Image//crosshair.tga");
 
@@ -729,15 +693,7 @@ void SceneText::Init()
 
 	theCameraEffects->ammo_empty = MeshBuilder::GetInstance()->GenerateQuad("ammo_empty", Color(1, 1, 1), 1.f);
 	theCameraEffects->ammo_empty->textureID = LoadTGA("Image//ammo_empty.tga");
-
-	//theCameraEffects = Create::CameraEffects(false);
-	//theCameraEffects->SetBloodScreen(MeshBuilder::GetInstance()->GenerateQuad("CAMERAEFFECTS_BLOODSCREEN", 
-	//									Color(1, 1, 1), 1.f));
-	//theCameraEffects->GetBloodScreen()->textureID = LoadTGA("Image//CameraEffects_Blood.tga");
-	//theCameraEffects->SetStatus_BloodScreen(false);
 	
-
-
 	// Hardware Abstraction
 	theKeyboard = new CKeyboard();
 	theKeyboard->Create(playerInfo);

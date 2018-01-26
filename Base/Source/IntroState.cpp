@@ -37,7 +37,7 @@ void CIntroState::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	IntroStateBackground = Create::Sprite2DObject("INTROSTATE_BKGROUND", 
 													Vector3(halfWindowWidth, halfWindowHeight, 0.0f), 
-													Vector3(800.0f, 600.0f, 0.0f));
+													Vector3(800.0f, 600.0f, 0.0f), true);
 
 	cout << "CIntroState loaded\n" << endl;
 }
