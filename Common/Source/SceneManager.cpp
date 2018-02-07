@@ -92,7 +92,7 @@ void SceneManager::SetActiveScene(const std::string& _name)
 	}
 
 	// Scene exist, set the next scene pointer to that scene
-	nextScene = sceneMap[_name];
+ 	nextScene = sceneMap[_name];
 }
 
 bool SceneManager::CheckSceneExist(const std::string& _name)

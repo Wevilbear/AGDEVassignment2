@@ -33,3 +33,29 @@ function CalculateDistanceSquare(x1,y1,z1,x2,y2,z2)
 	print (distanceSquare)
 	return distanceSquare
 end
+
+function GetMinMax(...)
+	local minValue = -1;
+	local maxValue = -1;
+	local avgValue = -1;
+	local numValues = 0;
+	for i,v in ipairs(arg) do
+		if minValue == -1 then
+			minValue = v
+		elseif v < minValue then 
+			minValue = v
+		end
+		
+		if maxValue == -1 then
+			maxValue = v
+		elseif v > maxValue then
+			maxValue = v
+		end
+		
+		avgValue = avgValue + v
+		numValues = numValues + 1
+	end
+	avgValue = avgValue / numValues
+	print(minValue, maxValue, avgValue, numValues)
+	return minValue, maxValue,avgValue,numValues
+end

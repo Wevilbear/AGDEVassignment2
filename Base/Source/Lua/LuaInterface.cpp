@@ -156,7 +156,7 @@ void CLuaInterface::saveIntValue(const char* varName,
 {
 	lua_getglobal(theLuaState, "SaveToLuaFile");
 	char outputString[80];
-	sprintf(outputString, "%s = %d\n", varName, value);
+	sprintf(outputString, "%s = %d \n", varName, value);
 	lua_pushstring(theLuaState, outputString);
 	lua_pushinteger(theLuaState, bOverwrite);
 	lua_call(theLuaState, 2, 0); cout << "....................";
@@ -167,7 +167,7 @@ void CLuaInterface::saveFloatValue(const char* varName,
 {
 	lua_getglobal(theLuaState, "SaveToLuaFile");
 	char outputString[80];
-	sprintf(outputString, "%s = %6.4f\n", varName, value);
+	sprintf(outputString, "%s = %6.4f \n", varName, value);
 	lua_pushstring(theLuaState, outputString);
 	lua_pushinteger(theLuaState, bOverwrite);
 	lua_call(theLuaState, 2, 0);

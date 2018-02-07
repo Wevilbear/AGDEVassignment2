@@ -59,7 +59,7 @@ CScene2D::CScene2D(SceneManager* _sceneMgr)
 	, theEnemy(NULL)
 	, Scene2D_Hero_Animated(NULL)
 {
-	_sceneMgr->AddScene("Scene2D", this);
+	//_sceneMgr->AddScene("Scene2D", this);
 }
 
 CScene2D::~CScene2D()
