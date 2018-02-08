@@ -5,6 +5,8 @@
 #include <map>
 #include <string>
 
+using std::map;
+
 class Scene;
 
 class SceneManager : public Singleton<SceneManager>
@@ -28,6 +30,13 @@ private:
 
 	std::map<std::string, Scene*> sceneMap;
 	Scene* activeScene, *nextScene;
+
+	static SceneManager* only_instance;
+	map <unsigned, Scene*> sceneStorage;	//database for scene
+	int currSceneID, nextSceneID;			//to iterate through the different scene
+	bool b_isTime;					//check if time is up for timed scene;
+	bool b_isNext;
+	float f_sceneTimer;
 };
 
 #endif // SCENE_MANAGER_H

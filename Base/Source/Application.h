@@ -10,7 +10,7 @@ using namespace irrklang;
 
 struct GLFWwindow;
 
-class Application
+class Application 
 {
 public:
 	static Application& GetInstance()
@@ -21,7 +21,7 @@ public:
 	void Init();
 	void Run();
 	void Exit();
-
+	static bool exitApp;
 	void UpdateInput();
 	void PostInputUpdate();
 	
