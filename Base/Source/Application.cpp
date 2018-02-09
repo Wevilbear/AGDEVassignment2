@@ -8,6 +8,8 @@
 #include "MenuState.h"
 #include "HighScoreState.h"
 #include "ShopState.h"
+#include "DefeatState.h"
+#include "VictoryState.h"
 //Include GLEW
 #include <GL/glew.h>
 
@@ -119,8 +121,8 @@ void Application::Init()
 	m_window_width = CLuaInterface::GetInstance()->getIntValue("width");
 	m_window_height = CLuaInterface::GetInstance()->getIntValue("height");
 
-	CLuaInterface::GetInstance()->saveFloatValue("Player1", 200.10, true);
-	CLuaInterface::GetInstance()->saveIntValue("Player2", 100);
+	/*CLuaInterface::GetInstance()->saveFloatValue("Player1", 200.10, true);
+	CLuaInterface::GetInstance()->saveIntValue("Player2", 100);*/
 
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
@@ -184,6 +186,8 @@ void Application::Init()
 	SceneManager::GetInstance()->AddScene("GameState", new SceneText());
 	SceneManager::GetInstance()->AddScene("ShopState", new CShopState());
 	SceneManager::GetInstance()->AddScene("HighScoreState", new CHighScoreState());
+	SceneManager::GetInstance()->AddScene("VictoryState", new CVictoryState());
+	SceneManager::GetInstance()->AddScene("DefeatState", new CDefeatState());
 
 	//Set the active scene
 	SceneManager::GetInstance()->SetActiveScene("IntroState");

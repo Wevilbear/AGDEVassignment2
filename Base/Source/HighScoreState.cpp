@@ -11,9 +11,11 @@ using namespace std;
 #include "RenderHelper.h"
 #include "SpriteEntity.h"
 #include "EntityManager.h"
-
+#include "PlayerInfo\PlayerInfo.h"
 #include "KeyboardController.h"
 #include "SceneManager.h"
+#include "CameraEffects\CameraEffects.h"
+
 
 CHighScoreState::CHighScoreState()
 {
@@ -48,6 +50,11 @@ void CHighScoreState::Init()
 
 	MeshBuilder::GetInstance()->GenerateQuad("gameHighScoreState", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("gameHighScoreState")->textureID = LoadTGA("Image//gameHighScoreState.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
+	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
+	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//calibri.tga");
+	MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
 
 
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -64,11 +71,23 @@ void CHighScoreState::Init()
 	bounceTime = 0.f;
 	elapsedTime = 0.f;
 	menuOption = 0;
+
+	
+	// Setup the 2D entities
+	float halfWindowWidth1 = Application::GetInstance().GetWindowWidth() / 3.3f;
+	float halfWindowHeight1 = Application::GetInstance().GetWindowHeight() / 2.3f;
+	float fontSize = 40.0f;
+	float halfFontSize1 = fontSize / 2.0f;
+	for (int i = 0; i < 4; ++i)
+	{
+		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth1, -halfWindowHeight1 + fontSize*i + halfFontSize1, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f, 1.0f, 0.0f));
+	}
 }
 void CHighScoreState::Update(double dt)
 {
 	elapsedTime += (float)dt;
-
+	GraphicsManager::GetInstance()->UpdateLights(dt);
+	EntityManager::GetInstance()->Update(dt);
 	if (KeyboardController::GetInstance()->IsKeyPressed(VK_UP))
 	{
 		menuOption--;
@@ -87,26 +106,31 @@ void CHighScoreState::Update(double dt)
 			menuOption = 0;
 		}
 	}
-	if  (KeyboardController::GetInstance()->IsKeyPressed('Q'))
+	if (KeyboardController::GetInstance()->IsKeyPressed('Q'))
 	{
 
 		cout << "Loading CHighScoreState" << endl;
 		SceneManager::GetInstance()->SetActiveScene("MenuState");
-	
+
 	}
 
-	
+
 	else if (KeyboardController::GetInstance()->IsKeyPressed('4'))
 	{
 		Application::exitApp = true;
 	}
 
 
-if (KeyboardController::GetInstance()->IsKeyReleased(VK_SPACE))
-{
-	cout << "Loading CHighScoreState" << endl;
-	SceneManager::GetInstance()->SetActiveScene("GameState");
-}
+	if (KeyboardController::GetInstance()->IsKeyReleased(VK_SPACE))
+	{
+		cout << "Loading CHighScoreState" << endl;
+		SceneManager::GetInstance()->SetActiveScene("GameState");
+	}
+
+	std::ostringstream ss4;
+	ss4.precision(7);
+	ss4 << "Player 1 Score: " << CPlayerInfo::GetInstance()->score;
+	textObj[2]->SetText(ss4.str());
 }
 void CHighScoreState::Render()
 {
@@ -121,6 +145,7 @@ void CHighScoreState::Render()
 
 	// Render the required entities
 	EntityManager::GetInstance()->Render();
+
 
 	// Setup 2D pipeline then render 2D
 	GraphicsManager::GetInstance()->SetOrthographicProjection(0,
@@ -169,6 +194,46 @@ void CHighScoreState::Render()
 
 	// Render the required entities
 	EntityManager::GetInstance()->RenderUI();
+
+	// Enable blend mode
+	glEnable(GL_BLEND);
+
+	// Setup 2D pipeline then render 2D
+	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
+	GraphicsManager::GetInstance()->DetachCamera();
+	EntityManager::GetInstance()->RenderUI();
+
+
+	
+
+
+	// Disable blend mode
+	glDisable(GL_BLEND);
+}
+
+void CHighScoreState::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizeX, float sizeY)
+{
+	glDisable(GL_DEPTH_TEST);
+	Mtx44 ortho;
+	ortho.SetToOrtho(0, 80, 0, 60, -10, 10); //size of screen UI
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity(); //No need camera for ortho mode
+
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Translate((float)x, (float)y, 0);
+	modelStack.Scale((float)sizeX, (float)sizeY, 1);
+	//to do: scale and translate accordingly
+	//RenderMesh(mesh, false); //UI should not have light
+	projectionStack.PopMatrix();
+	viewStack.PopMatrix();
+	modelStack.PopMatrix();
+	glEnable(GL_DEPTH_TEST);
+
 }
 void CHighScoreState::Exit()
 {

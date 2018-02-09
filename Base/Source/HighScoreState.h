@@ -6,18 +6,24 @@
 #include "MatrixStack.h"
 #include "FPSCamera.h"
 #include "SpriteEntity.h"
-
+#include "CameraEffects\CameraEffects.h"
+class TextEntity;
 class SceneManager;
 class CHighScoreState : public Scene
 {
 public:
 	CHighScoreState();
 	~CHighScoreState();
-
 	virtual void Init();
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizeX, float sizeY);
+	MS modelStack;
+	MS viewStack;
+	MS projectionStack;
+	CCameraEffects* theCameraEffects;
+	TextEntity* textObj[4];
 
 private:
 	FPSCamera camera;
