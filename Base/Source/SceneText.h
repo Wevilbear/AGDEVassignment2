@@ -35,6 +35,8 @@ public:
 
 	void RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizeX, float sizeY);
 	void SceneText::RenderMesh(Mesh *mesh, bool enableLight);
+	void CreateAndroid();
+	void CreateWindmill();
 public:
 	enum GEOMETRY_TYPE
 	{
@@ -92,6 +94,9 @@ protected:
 	bool bLightEnabled;
 
 	float fps;
+
+	float spawntimer = 0.0f;
+	float spawncountdown = 5.0f;
 };
 
 #endif

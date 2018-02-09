@@ -30,6 +30,13 @@ protected:
 	float m_fElapsedTimeBeforeUpdate;
 
 public:
+	enum STATE
+	{
+		PATROL_STATE,
+		ATTACK_STATE,
+
+		STATE_TOTAL
+	};
 	CEnemy3D(Mesh* _modelMesh);
 	virtual ~CEnemy3D();
 
@@ -68,6 +75,11 @@ public:
 	void Constrain(void);
 	// Render
 	void Render(void);
+private:
+	STATE state;
+	bool attackstate;
+	float attacktimer = 3.0f;
+	float attackcountdown = 3.0f;
 };
 
 namespace Create
