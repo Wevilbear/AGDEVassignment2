@@ -15,6 +15,7 @@ using namespace std;
 #include "KeyboardController.h"
 #include "SceneManager.h"
 #include "CameraEffects\CameraEffects.h"
+#include "LuaInterface.h"
 
 
 CHighScoreState::CHighScoreState()
@@ -55,12 +56,20 @@ void CHighScoreState::Init()
 	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
 	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//calibri.tga");
 	MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
-
+	// Setup the 2D entities
+	float halfWindowWidth1 = Application::GetInstance().GetWindowWidth() / 3.3f;
+	float halfWindowHeight1 = Application::GetInstance().GetWindowHeight() / 2.3f;
+	float fontSize = 30.0f;
+	float halfFontSize1 = fontSize / 2.0f;
+	for (int i = 0; i < 4; ++i)
+	{
+		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth1, -halfWindowHeight1 + fontSize*i + halfFontSize1 + 200, 1.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f, 1.0f, 0.0f));
+	}
 
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	MenuStateBackground = Create::Sprite2DObject("gameHighScoreState",
-		Vector3(halfWindowWidth, halfWindowHeight, 0.0f),
+		Vector3(0, 0, 0.0f),
 		Vector3(800.0f, 600.0f, 0.0f), true);
 
 	cout << "CHighScoreState loaded\n" << endl;
@@ -73,15 +82,7 @@ void CHighScoreState::Init()
 	menuOption = 0;
 
 	
-	// Setup the 2D entities
-	float halfWindowWidth1 = Application::GetInstance().GetWindowWidth() / 3.3f;
-	float halfWindowHeight1 = Application::GetInstance().GetWindowHeight() / 2.3f;
-	float fontSize = 40.0f;
-	float halfFontSize1 = fontSize / 2.0f;
-	for (int i = 0; i < 4; ++i)
-	{
-		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth1, -halfWindowHeight1 + fontSize*i + halfFontSize1, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f, 1.0f, 0.0f));
-	}
+	
 }
 void CHighScoreState::Update(double dt)
 {
@@ -128,8 +129,11 @@ void CHighScoreState::Update(double dt)
 	}
 
 	std::ostringstream ss4;
-	ss4.precision(7);
-	ss4 << "Player 1 Score: " << CPlayerInfo::GetInstance()->score;
+	ss4.precision(15);
+	
+	luaL_dofile(CLuaInterface::GetInstance()->theLuaState, "Image//DM2240_HighScore.lua");
+	float value=	CLuaInterface::GetInstance()->getFloatValue("Player1");
+	ss4 << "Player 1 Score: "<< value;
 	textObj[2]->SetText(ss4.str());
 }
 void CHighScoreState::Render()
@@ -189,11 +193,11 @@ void CHighScoreState::Render()
 
 
 
-	GraphicsManager::GetInstance()->DetachCamera();
-	modelStack.LoadIdentity();
+	//GraphicsManager::GetInstance()->DetachCamera();
+	//modelStack.LoadIdentity();
 
 	// Render the required entities
-	EntityManager::GetInstance()->RenderUI();
+	//EntityManager::GetInstance()->RenderUI();
 
 	// Enable blend mode
 	glEnable(GL_BLEND);
@@ -242,7 +246,7 @@ void CHighScoreState::Exit()
 
 	// Remove the meshes which are specific to CHighScoreState
 	MeshBuilder::GetInstance()->RemoveMesh("MENUSTATE_BKGROUND");
-
+	EntityManager::GetInstance()->entityList.clear();
 	// Detach camera from other entities
 	GraphicsManager::GetInstance()->DetachCamera();
 }
