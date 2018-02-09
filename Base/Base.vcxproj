@@ -14,6 +14,7 @@
     <ClCompile Include="Furniture.cpp" />
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\CameraEffects\CameraEffects.cpp" />
+    <ClCompile Include="Source\DefeatState.cpp" />
     <ClCompile Include="Source\Enemy\Enemy3D.cpp" />
     <ClCompile Include="Source\EntityManager.cpp" />
     <ClCompile Include="Source\FPSCamera.cpp" />
@@ -22,6 +23,7 @@
     <ClCompile Include="Source\HardwareAbstraction\Controller.cpp" />
     <ClCompile Include="Source\HardwareAbstraction\Keyboard.cpp" />
     <ClCompile Include="Source\HardwareAbstraction\Mouse.cpp" />
+    <ClCompile Include="Source\HighScoreState.cpp" />
     <ClCompile Include="Source\IntroState.cpp" />
     <ClCompile Include="Source\LevelOfDetails\LevelOfDetails.cpp" />
     <ClCompile Include="Source\Light.cpp" />
@@ -49,12 +51,14 @@
     <ClCompile Include="Source\SceneGraph\Transform.cpp" />
     <ClCompile Include="Source\SceneGraph\UpdateTransformation.cpp" />
     <ClCompile Include="Source\SceneText.cpp" />
+    <ClCompile Include="Source\ShopState.cpp" />
     <ClCompile Include="Source\SkyBox\SkyBoxEntity.cpp" />
     <ClCompile Include="Source\SoundEngine.cpp" />
     <ClCompile Include="Source\Spatial Partition\Grid.cpp" />
     <ClCompile Include="Source\Spatial Partition\SpatialPartition.cpp" />
     <ClCompile Include="Source\SpriteEntity.cpp" />
     <ClCompile Include="Source\TextEntity.cpp" />
+    <ClCompile Include="Source\VictoryState.cpp" />
     <ClCompile Include="Source\Waypoint\Waypoint.cpp" />
     <ClCompile Include="Source\Waypoint\WaypointManager.cpp" />
     <ClCompile Include="Source\WeaponInfo\GrenadeThrow.cpp" />
@@ -66,6 +70,7 @@
     <ClInclude Include="Furniture.h" />
     <ClInclude Include="Source\Application.h" />
     <ClInclude Include="Source\CameraEffects\CameraEffects.h" />
+    <ClInclude Include="Source\DefeatState.h" />
     <ClInclude Include="Source\Enemy\Enemy3D.h" />
     <ClInclude Include="Source\EntityManager.h" />
     <ClInclude Include="Source\FPSCamera.h" />
@@ -74,6 +79,7 @@
     <ClInclude Include="Source\HardwareAbstraction\Controller.h" />
     <ClInclude Include="Source\HardwareAbstraction\Keyboard.h" />
     <ClInclude Include="Source\HardwareAbstraction\Mouse.h" />
+    <ClInclude Include="Source\HighScoreState.h" />
     <ClInclude Include="Source\IntroState.h" />
     <ClInclude Include="Source\LevelOfDetails\LevelOfDetails.h" />
     <ClInclude Include="Source\Light.h" />
@@ -105,12 +111,14 @@
     <ClInclude Include="Source\SceneGraph\Transform.h" />
     <ClInclude Include="Source\SceneGraph\UpdateTransformation.h" />
     <ClInclude Include="Source\SceneText.h" />
+    <ClInclude Include="Source\ShopState.h" />
     <ClInclude Include="Source\SkyBox\SkyBoxEntity.h" />
     <ClInclude Include="Source\SoundEngine.h" />
     <ClInclude Include="Source\Spatial Partition\Grid.h" />
     <ClInclude Include="Source\Spatial Partition\SpatialPartition.h" />
     <ClInclude Include="Source\SpriteEntity.h" />
     <ClInclude Include="Source\TextEntity.h" />
+    <ClInclude Include="Source\VictoryState.h" />
     <ClInclude Include="Source\Waypoint\Waypoint.h" />
     <ClInclude Include="Source\Waypoint\WaypointManager.h" />
     <ClInclude Include="Source\WeaponInfo\GrenadeThrow.h" />

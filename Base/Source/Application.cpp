@@ -6,6 +6,10 @@
 #include "Lua\LuaInterface.h"
 #include "IntroState.h"
 #include "MenuState.h"
+#include "HighScoreState.h"
+#include "ShopState.h"
+#include "DefeatState.h"
+#include "VictoryState.h"
 //Include GLEW
 #include <GL/glew.h>
 
@@ -21,6 +25,7 @@
 GLFWwindow* m_window;
 const unsigned char FPS = 60; // FPS of this game
 const unsigned int frameTime = 1000 / FPS; // time for each frame
+bool Application::exitApp = false;
 
 //Define an error callback
 static void error_callback(int error, const char* description)
@@ -116,8 +121,8 @@ void Application::Init()
 	m_window_width = CLuaInterface::GetInstance()->getIntValue("width");
 	m_window_height = CLuaInterface::GetInstance()->getIntValue("height");
 
-	CLuaInterface::GetInstance()->saveFloatValue("Player1", 200.10, true);
-	CLuaInterface::GetInstance()->saveIntValue("Player2", 100);
+	/*CLuaInterface::GetInstance()->saveFloatValue("Player1", 200.10, true);
+	CLuaInterface::GetInstance()->saveIntValue("Player2", 100);*/
 
 	//Set the error callback
 	glfwSetErrorCallback(error_callback);
@@ -165,6 +170,7 @@ void Application::Init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		//return -1;
 	}
+	exitApp = false;
 
 	// Hide the cursor
 	glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -178,6 +184,10 @@ void Application::Init()
 	SceneManager::GetInstance()->AddScene("IntroState", new CIntroState());
 	SceneManager::GetInstance()->AddScene("MenuState", new CMenuState());
 	SceneManager::GetInstance()->AddScene("GameState", new SceneText());
+	SceneManager::GetInstance()->AddScene("ShopState", new CShopState());
+	SceneManager::GetInstance()->AddScene("HighScoreState", new CHighScoreState());
+	SceneManager::GetInstance()->AddScene("VictoryState", new CVictoryState());
+	SceneManager::GetInstance()->AddScene("DefeatState", new CDefeatState());
 
 	//Set the active scene
 	SceneManager::GetInstance()->SetActiveScene("IntroState");
@@ -189,7 +199,7 @@ void Application::Run()
 
 	SceneManager::GetInstance()->SetActiveScene("IntroState");
 	m_timer.startTimer();    // Start timer to calculate how long it takes to render this frame
-	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE))
+	while (!glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE) || !glfwWindowShouldClose(m_window) && !IsKeyPressed(VK_ESCAPE) && !exitApp)
 	{
 		glfwPollEvents();
 		UpdateInput();

@@ -213,6 +213,18 @@
     <ClCompile Include="Source\Lua\LuaInterface.cpp">
       <Filter>Lua</Filter>
     </ClCompile>
+    <ClCompile Include="Source\HighScoreState.cpp">
+      <Filter>GameStateManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\ShopState.cpp">
+      <Filter>GameStateManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\DefeatState.cpp">
+      <Filter>GameStateManagement</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\VictoryState.cpp">
+      <Filter>GameStateManagement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -376,6 +388,18 @@
     </ClInclude>
     <ClInclude Include="Source\Lua\lualib.h">
       <Filter>Lua</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\HighScoreState.h">
+      <Filter>GameStateManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\ShopState.h">
+      <Filter>GameStateManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DefeatState.h">
+      <Filter>GameStateManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\VictoryState.h">
+      <Filter>GameStateManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

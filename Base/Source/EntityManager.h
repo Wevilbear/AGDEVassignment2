@@ -42,6 +42,8 @@ public:
 	{
 		return entityList;
 	}
+
+	std::list<EntityBase*> entityList;
 private:
 	EntityManager();
 	virtual ~EntityManager();
@@ -49,7 +51,6 @@ private:
 	Vector3 getMinBox(EntityBase * _entity);
 	Vector3 getMaxBox(EntityBase * _entity);
 
-	std::list<EntityBase*> entityList;
 	// Handler to Spatial Partition
 	CSpatialPartition* theSpatialPartition = nullptr;
 };

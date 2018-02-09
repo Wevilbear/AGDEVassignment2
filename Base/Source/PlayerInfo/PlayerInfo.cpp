@@ -354,16 +354,16 @@ void CPlayerInfo::Update(double dt)
 		switch (theCurrentPosture)
 		{
 		case STAND:
-			position = m_pTerrain->GetTerrainHeight(Vector3(position.x, 0.0f, position.z));
+			position = m_pTerrain->GetTerrainHeight(Vector3(position.x, 10.0f, position.z));
 			target = position + viewDirection;
 			break;
 		case CROUCH:
-			position = m_pTerrain->GetTerrainHeight(Vector3(position.x, 0.0f, position.z));
+			position = m_pTerrain->GetTerrainHeight(Vector3(position.x, 10.0f, position.z));
 			position.y -= 5.0f;
 			target = position + viewDirection;
 			break;
 		case PRONE:
-			position = m_pTerrain->GetTerrainHeight(Vector3(position.x, 0.0f, position.z));
+			position = m_pTerrain->GetTerrainHeight(Vector3(position.x, 10.0f, position.z));
 			position.y -= 8.0f;
 			target = position + viewDirection;
 			break;
