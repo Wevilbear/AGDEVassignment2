@@ -29,10 +29,15 @@ moveRight = "D"
 CPlayerInfoStartPos = {0,0,10}
 
 -- Way points
-Waypoint_A_1 = {x=10.0, y=0.0, z=50.0}
-Waypoint_A_2 = {x=10.0, y=0.0, z=-50.0}
-Waypoint_A_3 = {x=-10.0, y=0.0, z=0.0}
+Waypoint_A_1 = {x=100.0, y= -10.0, z=50.0}
+Waypoint_A_2 = {x=10.0, y= -10.0, z=-100.0}
+Waypoint_A_3 = {x=-10.0, y= -10.0, z=0.0}
+Waypoint_A_4 = {x= -100.0, y = -10.0, z = -50.0}
 
+Waypoint_B_1 = {x = 200.0, y = -10.0, z = 150.0}
+Waypoint_B_2 = {x = 110.0, y = -10.0, z = 0.0}
+Waypoint_B_3 = {x = 90.0, y = -10.0, z = 100.0}
+Waypoint_B_4 = {x = 0.0, y = -10.0, z = 50.0}
 
 function CalculateDistanceSquare(x1,y1,z1,x2,y2,z2)
 	local distanceSquare = (x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1)+(z2 - z1)*(z2 - z1)

@@ -40,6 +40,7 @@ void CEnemy3D::Init(void)
 	listOfWaypoints.push_back(0);
 	listOfWaypoints.push_back(1);
 	listOfWaypoints.push_back(2);
+	listOfWaypoints.push_back(3);
 
 	m_iWayPointIndex = 0;
 
@@ -70,7 +71,9 @@ void CEnemy3D::Init(void)
 
 	// Add to EntityManager
 	EntityManager::GetInstance()->AddEntity(this, true);
+	attackstate = false;
 
+	state = PATROL_STATE;
 }
 
 // Reset this player instance to default
@@ -153,44 +156,86 @@ CWaypoint * CEnemy3D::GetNextWaypoint(void)
 // Update
 void CEnemy3D::Update(double dt)
 {
-	//Vector3 viewVector = (target - playerInfo->s_instance->position).Normalized();
-	Vector3 viewVector = (target - position).Normalized();
+	Vector3 viewVector;
+	try
+	{
+		 viewVector = (target - position).Normalized();
+	}
+	catch (DivideByZero)
+	{
+		 viewVector = Vector3(0, 0, 0);
+	}
+
 	position += viewVector * (float)m_dSpeed * (float)dt;
 
-	//cout << position << "..." << viewVector << endl;
-
-	// Constrain the position
-	//Constrain();
-
-	//Update the target
-	/*
-	if(position.z > 400.0f)
-	target.z = position.z * -1;
-	else if(position.z < -400.0f)
-	target.z = position.z * -1;
-	*/
-	if ((target - position).LengthSquared() < 25.0f)
+	switch (state)
 	{
-		CWaypoint * nextWaypoint = GetNextWaypoint();
-		if (nextWaypoint)
-			target = nextWaypoint->GetPosition();
-		else
-			target = Vector3(0, 0, 0);
-		//cout << "Next target: " << target << endl;
+		case ATTACK_STATE:
+		{
+			if ((playerInfo->GetInstance()->GetPos() - position).Length() > 100.0f)
+			{
+				state = PATROL_STATE;
+				CWaypoint * point = CWaypointManager::GetInstance()->GetNearestWaypoint(position);
+				target = point->GetPosition();
+				break;
+			}
+			
+			target = playerInfo->GetInstance()->GetPos();
+			if ((playerInfo->GetInstance()->GetPos() - position).Length() <= 10.0f && attacktimer > attackcountdown)
+			{
+				playerInfo->GetInstance()->hp--;
+				attacktimer = 0.0f;
+			}
+			attacktimer += dt;
+		}
+			break;
+		case PATROL_STATE:
+		{
+			if ((playerInfo->GetInstance()->GetPos() - position).Length() <= 100.0f)
+			{
+				state = ATTACK_STATE;
+				break;
+			}
+
+			if ((target - position).LengthSquared() < 25.0f)
+			{
+				CWaypoint * nextWaypoint = GetNextWaypoint();
+				if (nextWaypoint)
+				{
+					target = nextWaypoint->GetPosition();
+				}
+				else
+					target = Vector3(0, 0, 0);
+			}
+		}
+			break;
 	}
+
+	//Vector3 viewVector = (target - playerInfo->s_instance->position).Normalized();
+	//cout << playerInfo->GetInstance()->GetPos() << endl;
+	//cout << (playerInfo->GetInstance()->GetPos() - position).Length() << endl;
+	//if ((target - position).Length() < 25.0f)
+	//{
+	//	CWaypoint * nextWaypoint = GetNextWaypoint();
+	//	if (nextWaypoint)
+	//		target = nextWaypoint->GetPosition();
+	//	else
+	//		target = Vector3(0, 0, 0);
+	//	//cout << "Next target: " << target << endl;
+	//}
 	// This is RealTime Loop control
 	// Update the target once every 5 seconds. 
 	// Doing more of these calculations will not affect the outcome.
-	m_fElapsedTimeBeforeUpdate += dt;
-	if (m_fElapsedTimeBeforeUpdate > 5.0f)
-	{
-		//cout << m_fElapsedTimeBeforeUpdate << endl;
-		m_fElapsedTimeBeforeUpdate = 0.0f;
-		if (position.z > 400.0f)
-			target.z = position.z * -1;
-		else if (position.z < -400.0f)
-			target.z = position.z * -1;
-	}
+	//m_fElapsedTimeBeforeUpdate += dt;
+	//if (m_fElapsedTimeBeforeUpdate > 5.0f)
+	//{
+	//	//cout << m_fElapsedTimeBeforeUpdate << endl;
+	//	m_fElapsedTimeBeforeUpdate = 0.0f;
+	//	if (position.z > 400.0f)
+	//		target.z = position.z * -1;
+	//	else if (position.z < -400.0f)
+	//		target.z = position.z * -1;
+	//}
 	SetPAABB(Vector3(scale.x, scale.y, scale.z), position);
 }
 
@@ -289,10 +334,6 @@ CEnemy3D* Create::Enemy3D(const std::string& _meshName,
 	CEnemy3D* result = new CEnemy3D(modelMesh);
 	result->Init();
 	result->SetPos(_position);
-	if (_meshName == "windmill_fan")
-	{
-		//cout << result->getpos << endl;
-	}
 	result->SetScale(_scale);
 	result->SetCollider(false);
 	result->setType(EntityBase::ENEMY);

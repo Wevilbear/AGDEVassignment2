@@ -70,48 +70,6 @@ SceneText::~SceneText()
 
 void SceneText::Init()
 {
-	//currProg = GraphicsManager::GetInstance()->LoadShader("default", "Shader//Texture.vertexshader", "Shader//Texture.fragmentshader");
-	//
-	//// Tell the shader program to store these uniform locations
-	//currProg->AddUniform("MVP");
-	//currProg->AddUniform("MV");
-	//currProg->AddUniform("MV_inverse_transpose");
-	//currProg->AddUniform("material.kAmbient");
-	//currProg->AddUniform("material.kDiffuse");
-	//currProg->AddUniform("material.kSpecular");
-	//currProg->AddUniform("material.kShininess");
-	//currProg->AddUniform("lightEnabled");
-	//currProg->AddUniform("numLights");
-	//currProg->AddUniform("lights[0].type");
-	//currProg->AddUniform("lights[0].position_cameraspace");
-	//currProg->AddUniform("lights[0].color");
-	//currProg->AddUniform("lights[0].power");
-	//currProg->AddUniform("lights[0].kC");
-	//currProg->AddUniform("lights[0].kL");
-	//currProg->AddUniform("lights[0].kQ");
-	//currProg->AddUniform("lights[0].spotDirection");
-	//currProg->AddUniform("lights[0].cosCutoff");
-	//currProg->AddUniform("lights[0].cosInner");
-	//currProg->AddUniform("lights[0].exponent");
-	//currProg->AddUniform("lights[1].type");
-	//currProg->AddUniform("lights[1].position_cameraspace");
-	//currProg->AddUniform("lights[1].color");
-	//currProg->AddUniform("lights[1].power");
-	//currProg->AddUniform("lights[1].kC");
-	//currProg->AddUniform("lights[1].kL");
-	//currProg->AddUniform("lights[1].kQ");
-	//currProg->AddUniform("lights[1].spotDirection");
-	//currProg->AddUniform("lights[1].cosCutoff");
-	//currProg->AddUniform("lights[1].cosInner");
-	//currProg->AddUniform("lights[1].exponent");
-	//currProg->AddUniform("colorTextureEnabled");
-	//currProg->AddUniform("colorTexture");
-	//currProg->AddUniform("textEnabled");
-	//currProg->AddUniform("textColor");
-	//
-	//// Tell the graphics manager to use the shader we just loaded
-	//GraphicsManager::GetInstance()->SetActiveShader("default");
-
 	lights[0] = new Light();
 	GraphicsManager::GetInstance()->AddLight("lights[0]", lights[0]);
 	lights[0]->type = Light::LIGHT_DIRECTIONAL;
@@ -336,219 +294,38 @@ void SceneText::Init()
 		CLuaInterface::GetInstance()->GetField("y"),
 		CLuaInterface::GetInstance()->GetField("z")));
 	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_3");
-	CWaypointManager::GetInstance()->AddWaypoint(anotherWaypoint, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+	int nextwaypoint = CWaypointManager::GetInstance()->AddWaypoint(anotherWaypoint, Vector3(CLuaInterface::GetInstance()->GetField("x"),
 		CLuaInterface::GetInstance()->GetField("y"),
 		CLuaInterface::GetInstance()->GetField("z")));
+	lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_A_4");
+	int lastwaypoint = CWaypointManager::GetInstance()->AddWaypoint(nextwaypoint, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+		CLuaInterface::GetInstance()->GetField("y"),
+		CLuaInterface::GetInstance()->GetField("z")));
+
+	//lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_B_1");
+	//int bWayPoint1 = CWaypointManager::GetInstance()->AddWaypoint(lastwaypoint, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+	//	CLuaInterface::GetInstance()->GetField("y"),
+	//	CLuaInterface::GetInstance()->GetField("z")));
+	//lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_B_2");
+	//int bWayPoint2 = CWaypointManager::GetInstance()->AddWaypoint(bWayPoint1, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+	//	CLuaInterface::GetInstance()->GetField("y"),
+	//	CLuaInterface::GetInstance()->GetField("z")));
+	//lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_B_3");
+	//int bWayPoint3 = CWaypointManager::GetInstance()->AddWaypoint(bWayPoint2, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+	//	CLuaInterface::GetInstance()->GetField("y"),
+	//	CLuaInterface::GetInstance()->GetField("z")));
+	//lua_getglobal(CLuaInterface::GetInstance()->theLuaState, "Waypoint_B_4");
+	//CWaypointManager::GetInstance()->AddWaypoint(nextwaypoint, Vector3(CLuaInterface::GetInstance()->GetField("x"),
+	//	CLuaInterface::GetInstance()->GetField("y"),
+	//	CLuaInterface::GetInstance()->GetField("z")));
 	CWaypointManager::GetInstance()->PrintSelf();
 
 	//anEnemy3D->SetTerrain(groundEntity);
 	//Robot
 	// Create a CEnemy instance
 	//parent
-	anEnemy3D = Create::Enemy3D("high_head", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	anEnemy3D->setBoxSizeAABB((Vector3(5, 5, 5)));
-	anEnemy3D->InitLOD("high_head", "med_head", "low_head");
-	Enemy.push_back(anEnemy3D);
-
-	modelStack.PushMatrix();
-	modelStack.Translate(-30.0f, -10, -100);
-	modelStack.Scale(5, 5, 5);
-	//RenderMesh(meshList[SceneText::GEO_BACKGROUND], 0, 0, 200, 200);
-	modelStack.PopMatrix();
-	CSceneNode*theNode1 = CSceneGraph::GetInstance()->AddNode(anEnemy3D);
-	if (theNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-
-	
-	//child
-	anEnemy3D = Create::Enemy3D("high_left_arm", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	
-	anEnemy3D->InitLOD("high_left_arm", "med_left_arm", "low_left_arm");
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode* anotherNode1 = theNode1->AddChild(anEnemy3D);
-	if (anotherNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-	//child
-	anEnemy3D = Create::Enemy3D("high_right_arm", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	
-	anEnemy3D->InitLOD("high_right_arm", "med_right_arm", "low_right_arm");
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode* anotherNode2 = theNode1->AddChild(anEnemy3D);
-	if (anotherNode1 == NULL)
-	{//if i test might take a while
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-	//child
-	anEnemy3D = Create::Enemy3D("high_left_leg", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	anEnemy3D->setBoxSizeAABB((Vector3(10, 10, 10)));
-	anEnemy3D->InitLOD("high_left_leg", "med_left_leg", "low_left_leg");
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode* anotherNode3 = theNode1->AddChild(anEnemy3D);
-	if (anotherNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-	//child
-	
-
-
-	anEnemy3D = Create::Enemy3D("high_right_leg", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	anEnemy3D->setBoxSizeAABB((Vector3(10, 10, 10)));
-	anEnemy3D->InitLOD("high_right_leg", "med_right_leg", "low_right_leg");
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode* anotherNode4 = theNode1->AddChild(anEnemy3D);
-	if (anotherNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-
-	//another set
-	anEnemy3D = Create::Enemy3D("high_head", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(-20.0f, -10, -90));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	
-	anEnemy3D->InitLOD("high_head", "med_head", "low_head");
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode*theNode2 = CSceneGraph::GetInstance()->AddNode(anEnemy3D);
-	if (theNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-
-
-	//child
-	anEnemy3D = Create::Enemy3D("high_left_arm", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(10.0f, -10, -60));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	
-	Enemy.push_back(anEnemy3D);
-	CSceneNode* anotherNode5 = theNode2->AddChild(anEnemy3D);
-	if (anotherNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-	//child
-	anEnemy3D = Create::Enemy3D("high_right_arm", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(30.0f, -10, -40));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode* anotherNode6 = theNode2->AddChild(anEnemy3D);
-	if (anotherNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-	//child
-	anEnemy3D = Create::Enemy3D("high_left_leg", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(50.0f, -10, -20));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode* anotherNode7 = theNode2->AddChild(anEnemy3D);
-	if (anotherNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-	//child
-	anEnemy3D = Create::Enemy3D("high_right_leg", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(70.0f, -10, -0));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode* anotherNode8 = theNode2->AddChild(anEnemy3D);
-	if (anotherNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-
-	//windmill
-	//another set
-	anEnemy3D = Create::Enemy3D("windmill_base", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(-20.0f, -10, -200));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	anEnemy3D->InitLOD("high_head", "med_head", "low_head");
-	Enemy.push_back(anEnemy3D);
-	
-	CSceneNode*windMillBase = CSceneGraph::GetInstance()->AddNode(anEnemy3D);
-	if (theNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-
-	anEnemy3D = Create::Enemy3D("windmill_body", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(-20.0f, -10, -200));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	anEnemy3D->setBoxSizeAABB((Vector3(100, 100, 100)));
-	anEnemy3D->InitLOD("high_head", "med_head", "low_head");
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode* anotherNode9 = windMillBase->AddChild(anEnemy3D);
-	if (theNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
-
-	anEnemy3D = Create::Enemy3D("windmill_fan", Vector3(-20.0f, 0.0f, -20.0f));
-	anEnemy3D->Init();
-	anEnemy3D->SetPos(Vector3(-20.0f, -10, -200));
-	anEnemy3D->SetTerrain(groundEntity);
-	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
-	anEnemy3D->setBoxSizeAABB((Vector3(100, 100, 100)));
-	anEnemy3D->InitLOD("high_head", "med_head", "low_head");
-
-	Enemy.push_back(anEnemy3D);
-
-	CSceneNode* anotherNode10 = windMillBase->AddChild(anEnemy3D);
-	if (theNode1 == NULL)
-	{
-		cout << "EntityManager::AddEntity: Unable to add to scene graph!" << endl;
-	}
+	CreateAndroid();
+	CreateWindmill();
 
 	GenericEntity* baseCube = Create::Entity("high_head", Vector3(0.0f, -10.0f, 0.0f));
 	CSceneNode* baseNode = CSceneGraph::GetInstance()->AddNode(baseCube);
@@ -718,6 +495,149 @@ void SceneText::Init()
 	theMouse->Create(playerInfo);
 }
 
+void SceneText::CreateAndroid()
+{
+	//parent(head)
+	anEnemy3D = Create::Enemy3D("high_head", Vector3(-20.0f, 0.0f, -20.0f));
+	anEnemy3D->Init();
+	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
+	anEnemy3D->SetTerrain(groundEntity);
+	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	anEnemy3D->setBoxSizeAABB((Vector3(5, 5, 5)));
+	anEnemy3D->InitLOD("high_head", "med_head", "low_head");
+	Enemy.push_back(anEnemy3D);
+
+	modelStack.PushMatrix();
+	modelStack.Translate(-30.0f, -10, -100);
+	modelStack.Scale(5, 5, 5);
+	modelStack.PopMatrix();
+	CSceneNode*theNode1 = CSceneGraph::GetInstance()->AddNode(anEnemy3D);
+
+	//child of head(left arm)
+	anEnemy3D = Create::Enemy3D("high_left_arm", Vector3(-20.0f, 0.0f, -20.0f));
+	anEnemy3D->Init();
+	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
+	anEnemy3D->SetTerrain(groundEntity);
+	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	anEnemy3D->InitLOD("high_left_arm", "med_left_arm", "low_left_arm");
+	Enemy.push_back(anEnemy3D);
+	CSceneNode* anotherNode1 = theNode1->AddChild(anEnemy3D);
+
+	//child of head(right arm)
+	anEnemy3D = Create::Enemy3D("high_right_arm", Vector3(-20.0f, 0.0f, -20.0f));
+	anEnemy3D->Init();
+	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
+	anEnemy3D->SetTerrain(groundEntity);
+	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	anEnemy3D->InitLOD("high_right_arm", "med_right_arm", "low_right_arm");
+	Enemy.push_back(anEnemy3D);
+	CSceneNode* anotherNode2 = theNode1->AddChild(anEnemy3D);
+
+	//child
+	anEnemy3D = Create::Enemy3D("high_left_leg", Vector3(-20.0f, 0.0f, -20.0f));
+	anEnemy3D->Init();
+	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
+	anEnemy3D->SetTerrain(groundEntity);
+	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	anEnemy3D->setBoxSizeAABB((Vector3(10, 10, 10)));
+	anEnemy3D->InitLOD("high_left_leg", "med_left_leg", "low_left_leg");
+	Enemy.push_back(anEnemy3D);
+	CSceneNode* anotherNode3 = theNode1->AddChild(anEnemy3D);
+	//child
+	anEnemy3D = Create::Enemy3D("high_right_leg", Vector3(-20.0f, 0.0f, -20.0f));
+	anEnemy3D->Init();
+	anEnemy3D->SetPos(Vector3(-30.0f, -10, -100));
+	anEnemy3D->SetTerrain(groundEntity);
+	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	anEnemy3D->setBoxSizeAABB((Vector3(10, 10, 10)));
+	anEnemy3D->InitLOD("high_right_leg", "med_right_leg", "low_right_leg");
+	Enemy.push_back(anEnemy3D);
+	CSceneNode* anotherNode4 = theNode1->AddChild(anEnemy3D);
+
+	////another set
+	//anEnemy3D = Create::Enemy3D("high_head", Vector3(-20.0f, 0.0f, -20.0f));
+	//anEnemy3D->Init();
+	//anEnemy3D->SetPos(Vector3(-20.0f, -10, -90));
+	//anEnemy3D->SetTerrain(groundEntity);
+	//anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	//anEnemy3D->InitLOD("high_head", "med_head", "low_head");
+	//Enemy.push_back(anEnemy3D);
+	//CSceneNode*theNode2 = CSceneGraph::GetInstance()->AddNode(anEnemy3D);
+
+	////child
+	//anEnemy3D = Create::Enemy3D("high_left_arm", Vector3(-20.0f, 0.0f, -20.0f));
+	//anEnemy3D->Init();
+	//anEnemy3D->SetPos(Vector3(10.0f, -10, -60));
+	//anEnemy3D->SetTerrain(groundEntity);
+	//anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	//Enemy.push_back(anEnemy3D);
+	//CSceneNode* anotherNode5 = theNode2->AddChild(anEnemy3D);
+
+	////child
+	//anEnemy3D = Create::Enemy3D("high_right_arm", Vector3(-20.0f, 0.0f, -20.0f));
+	//anEnemy3D->Init();
+	//anEnemy3D->SetPos(Vector3(30.0f, -10, -40));
+	//anEnemy3D->SetTerrain(groundEntity);
+	//anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	//Enemy.push_back(anEnemy3D);
+	//CSceneNode* anotherNode6 = theNode2->AddChild(anEnemy3D);
+
+	////child
+	//anEnemy3D = Create::Enemy3D("high_left_leg", Vector3(-20.0f, 0.0f, -20.0f));
+	//anEnemy3D->Init();
+	//anEnemy3D->SetPos(Vector3(50.0f, -10, -20));
+	//anEnemy3D->SetTerrain(groundEntity);
+	//anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	//Enemy.push_back(anEnemy3D);
+	//CSceneNode* anotherNode7 = theNode2->AddChild(anEnemy3D);
+
+	////child
+	//anEnemy3D = Create::Enemy3D("high_right_leg", Vector3(-20.0f, 0.0f, -20.0f));
+	//anEnemy3D->Init();
+	//anEnemy3D->SetPos(Vector3(70.0f, -10, -0));
+	//anEnemy3D->SetTerrain(groundEntity);
+	//anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	//Enemy.push_back(anEnemy3D);
+	//CSceneNode* anotherNode8 = theNode2->AddChild(anEnemy3D);
+}
+
+void SceneText::CreateWindmill()
+{
+	//windmill
+	theCube = Create::Entity("windmill_base", Vector3(-20.0f, -10.0f, -200.0f), (100,100,100));
+	//anEnemy3D->Init();
+	//anEnemy3D->SetPos(Vector3(-20.0f, -10, -200));
+	//anEnemy3D->SetTerrain(groundEntity);
+	theCube->SetAABB(Vector3(theCube->GetScale().x, theCube->GetScale().y, theCube->GetScale().z), theCube->GetPosition());
+	theCube->InitLOD("high_head", "med_head", "low_head");
+	Objects.push_back(theCube);
+
+	CSceneNode*windMillBase = CSceneGraph::GetInstance()->AddNode(theCube);
+
+	theCube = Create::Entity("windmill_body", Vector3(-20.0f, 0.0f, -20.0f), (100,100,100));
+	//anEnemy3D->Init();
+	//anEnemy3D->SetPos(Vector3(-20.0f, -10, -200));
+	//anEnemy3D->SetTerrain(groundEntity);
+	theCube->SetAABB(Vector3(theCube->GetScale().x, theCube->GetScale().y, theCube->GetScale().z), theCube->GetPosition());
+	//anEnemy3D->setBoxSizeAABB((Vector3(100, 100, 100)));
+	theCube->InitLOD("high_head", "med_head", "low_head");
+	Objects.push_back(theCube);
+
+	CSceneNode* anotherNode9 = windMillBase->AddChild(anEnemy3D);
+
+	/*anEnemy3D = Create::Enemy3D("windmill_fan", Vector3(-20.0f, 0.0f, -20.0f));
+	anEnemy3D->Init();
+	anEnemy3D->SetPos(Vector3(-20.0f, -10, -200));
+	anEnemy3D->SetTerrain(groundEntity);
+	anEnemy3D->SetAABB(Vector3(anEnemy3D->GetScale().x, anEnemy3D->GetScale().y, anEnemy3D->GetScale().z), anEnemy3D->GetPosition());
+	anEnemy3D->setBoxSizeAABB((Vector3(100, 100, 100)));
+	anEnemy3D->InitLOD("high_head", "med_head", "low_head");
+
+	Enemy.push_back(anEnemy3D);
+
+	CSceneNode* anotherNode10 = windMillBase->AddChild(anEnemy3D);*/
+}
+
 void SceneText::Update(double dt)
 {
 	// Update our entities
@@ -804,20 +724,6 @@ void SceneText::Update(double dt)
 
 	GraphicsManager::GetInstance()->UpdateLights(dt);
 
-
-	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
-	// Eg. FPSRenderEntity or inside RenderUI for LightEntity
-	/*std::ostringstream ss;
-	ss.precision(5);
-	float fps = (float)(1.f / dt);
-	ss << "FPS: " << fps;
-	textObj[1]->SetText(ss.str());
-
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Sway:" << playerInfo->m_fCameraSwayAngle;
-	textObj[2]->SetText(ss1.str());*/
-
 	std::ostringstream ss2;
 	ss2.precision(5);
 	ss2 << " " << playerInfo->weaponManager[playerInfo->m_iCurrentWeapon]->magRounds << "/"<< playerInfo->weaponManager[playerInfo->m_iCurrentWeapon]->totalRounds;
@@ -841,6 +747,12 @@ void SceneText::Update(double dt)
 
 	// Update camera effects
 	theCameraEffects->Update(dt);
+	spawntimer += dt;
+	if(spawntimer > spawncountdown)
+	{
+		//CreateAndroid();
+		spawntimer = 0.0f;
+	}
 }
 
 void SceneText::RenderMeshOnScreen(Mesh* mesh, float x, float y, float sizeX, float sizeY)
